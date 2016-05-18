@@ -1,0 +1,9 @@
+A. I think it is going to have a length of 10. If there is no __str__ method defined, it would just throw the
+memory location of the object 10 times.
+
+
+
+B. I believe that this does raise an AssertionError. We Assert that r1 and r2 occupants are not the same.
+However, when we did the r2 = r1 statement we pointed them to the same object. Then we changed the occupant of
+the object to Keith Richards. So I believe that the object has the same occupant now, and therefore doesn't raise an
+error.
