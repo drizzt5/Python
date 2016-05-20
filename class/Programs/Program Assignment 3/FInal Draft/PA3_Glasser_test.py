@@ -1,5 +1,14 @@
+"""
+Author: Dillon Glasser
+Class: CS3023 Intermediate Programming
+Assignment: Program Assignment 3
+Date: 5/18/2016
+
+"""
+
+
 import unittest
-from PA3_starter_signature import Signature
+from PA3_Glasser_signature import Signature
 
 
 class MyTestCase(unittest.TestCase):
@@ -14,28 +23,30 @@ class MyTestCase(unittest.TestCase):
             "James Fennimore Cooper\n",
             "Peter, Paul, and Mary\n",
         ]
-        ig.average_word_length(text), 5.14285714286, 4)
 
-        # test type_token_ratio and hapax_legomana_ratio
-        def test_type_and_hapax(self):
-            text = [
-                "James Fennimore Cooper\n",
-                "Peter, Paul, and Mary\n",
-                "James Gosling\n"
-            ]
+        self.assertAlmostEqual(self.sig.average_word_length(text), 5.14285714286, 4)
 
-            self.assertAlmostEqual(self.sig.type_token_ratio(text), 0.88888, 4)
+    # test type_token_ratio and hapax_legomana_ratio
+    def test_type_and_hapax(self):
 
-            self.assertAlmostEqual(self.sig.hapax_legomana_ratio(text), 0.777777777778, 4)
+        text = [
+            "James Fennimore Cooper\n",
+            "Peter, Paul, and Mary\n",
+            "James Gosling\n"
+        ]
 
-            # test split_on_separators
+        self.assertAlmostEqual(self.sig.type_token_ratio(text), 0.88888, 4)
 
-        def test_split_on_separators(self):
-            hooray = "Hooray! Finally, we're done."
-            thesplit = ['Hooray', ' Finally', " we're done."]
+        self.assertAlmostEqual(self.sig.hapax_legomana_ratio(text), 0.777777777778, 4)
 
-            self.as
-        self.assertAlmostEqual(self.ssertEqual(self.sig.split_on_separators(hooray, "!,"), thesplit)
+    # test split_on_separators
+    def test_split_on_separators(self):
+
+        hooray = "Hooray! Finally, we're done."
+        thesplit = ['Hooray', ' Finally', " we're done."]
+
+
+        self.assertEqual(self.sig.split_on_separators(hooray, "!,"), thesplit)
 
 
     # test average_sentence_length and average_sentence_complexity

@@ -1,26 +1,35 @@
-
-from math    import *
+from math import *
 from time import *
-import re
-from PA3_helper import
+from PA3_helper import Helper
 
 class Signature:
 
-    ### Methods you need to implement. Read the comments very carefully ###
+    def split_cleanup(self, text):
+        helper = Helper()
+        sents = []  # sentences
+        for x in text:
+            sents += x.split()
+
+        splitWords = []
+        for i in sents:
+            splitWords.append(helper.clean_up(i))
+
+        return splitWords
 
     def split_on_separators(self, original, separators):
         ''' Return a list of non-empty, non-blank strings from the original string
         determined by splitting the string on any of the separators.
         separators is a string of single-character separators.'''
 
-        # TO DO: Complete this function's body to meet its specification.
-        result = ""
+        result = []
+        word = ""
         for ch in original:
             if ch in separators:
-                result = result + '*&('
+                result.append(word)
+                word = ""
             else:
-                result = result + ch
-        result = result.split("*&(")
+                word += ch
+        result.append(word)
         return result
 
 
@@ -30,17 +39,7 @@ class Signature:
         text is a non-empty list of strings each ending in \n.
         At least one line in text contains a word.'''
 
-        # TO DO: Replace this function's body to meet its specification.
-
-        ## Changes to string form
-        # newStr = ""
-        # for i in text:
-        #     newStr = newStr + i + " "
-        newStr = ' '.join(text)
-
-
-        ## takes all words and puts into a list
-        splitWords = re.findall(r"[\w']+", newStr)
+        splitWords = self.split_cleanup(text)
 
         length = 0
         for word in splitWords:
@@ -56,20 +55,12 @@ class Signature:
         text is a non-empty list of strings each ending in \n.
         At least one line in text contains a word. '''
 
-        # TO DO: Replace this function's body to meet its specification.
-        ## Changes to string form
-        newStr = ""
-        for i in text:
-            newStr = newStr + i + " "
-
-        ## takes all words and puts into a list
-        splitWords = re.findall(r"[\w']+", newStr)
+        splitWords = self.split_cleanup(text)
 
         checker = []
         for word in splitWords:
             if word not in checker:
                 checker.append(word)
-
         return len(checker) / len(splitWords)
 
 
@@ -80,13 +71,7 @@ class Signature:
         text is a list of strings each ending in \n.
         At least one line in text contains a word.'''
 
-        # TO DO: Replace this function's body to meet its specification.
-        newStr = ""
-        for i in text:
-            newStr = newStr + i + " "
-
-        ## takes all words and puts into a list
-        splitWords = re.findall(r"[\w']+", newStr)
+        splitWords = self.split_cleanup(text)
 
         checker = []
         for word in splitWords:
@@ -107,14 +92,23 @@ class Signature:
         punctuation surrounded by terminating punctuation
         or beginning or end of file. '''
 
-        # TO DO: Replace this function's body to meet its specification.
+        helper = Helper()
 
         newStr = ' '.join(text)
+        sents = self.split_on_separators(newStr, "!?.")
 
-        result = self.split_on_separators(newStr, "!?.")
-        print(result)
+        word_list = []
+        count = 0
+        for line in sents:
+            if line != '\n':
+                count += 1
+            line = line.replace("\n", " ")
+            for word in line.split(" "):
+                cleanWord = helper.clean_up(word)
+                if cleanWord != "":
+                    word_list.append(cleanWord)
 
-        return 1.0
+        return len(word_list) / count
 
 
     def average_sentence_complexity(self, text):
@@ -126,8 +120,22 @@ class Signature:
         Phrases are substrings of a sentences separated by
         one or more of the following delimiters ,;: '''
 
-        # TO DO: Replace this function's body to meet its specification.
-        return 1.0
+        newStr = ' '.join(text)
+        sents = self.split_on_separators(newStr, "!?.")
+
+        dm = [",", ":", ";"]
+        senCount = 0
+        phraseCount = 0
+
+        for line in sents:
+            if line != '\n':
+                senCount += 1
+            for word in line.split(" "):
+                for char in word:
+                    if char in dm:
+                        phraseCount += 1
+
+        return (phraseCount + senCount) / senCount
 
 
     def compare_signatures(self, sig1, sig2, weight):
@@ -144,6 +152,7 @@ class Signature:
         weight is a list of multiplicative weights to apply to each
         linguistic feature. weight[0] is ignored.
         '''
-
-        # TO DO: Replace this function's body to meet its specification.
-        return  0.0
+        result=0
+        for i in range(1,6):
+            result+=(abs(sig1[i]-sig2[i])*weight[i])
+        return result
